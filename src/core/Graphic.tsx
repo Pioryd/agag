@@ -2,6 +2,7 @@ import React from "react";
 import { useUpdate, useFrame } from "react-three-fiber";
 import * as THREE from "three";
 
+import { useGameObject } from "../managers/GameObject";
 import { useAsset, SpriteAsset } from "../managers/Asset";
 
 import { Position } from "./types";
@@ -28,6 +29,7 @@ export default React.memo(
     if (!asset || !asset.animation || !asset.animations?.[asset.animation])
       console.error(`Wrong asset data.\n'` + JSON.stringify(asset, null, 2));
 
+    const { draw } = useGameObject();
     const assets = useAsset();
     const textureRef = useUpdate<THREE.Texture>((texture) => {
       texture.needsUpdate = true;
@@ -56,6 +58,8 @@ export default React.memo(
     React.useEffect(() => updateTextureOffset(), [updateTextureOffset]);
 
     useFrame(() => {
+      if (!draw) return;
+
       updateTextureOffset();
     });
 
@@ -63,7 +67,7 @@ export default React.memo(
       let size = { x: 0, y: 0 };
 
       if (!asset?.frame) {
-        console.error(`No frame width/height`);
+        console.error(`No frame settings`);
       } else if (!image) {
         console.error(`Image does not exist url:[${asset.url}].`);
       } else {

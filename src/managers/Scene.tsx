@@ -3,7 +3,11 @@ import { createPortal } from "react-three-fiber";
 import { v4 as uuidv4 } from "uuid";
 
 import { EventData } from "../core/useEventManager";
+import Map, { Props as MapProps } from "../core/Map";
+
 import Stats from "../components/Stats";
+
+import { useGame } from "./Game";
 
 export type EventInitialize = EventData<"Initialize", string>;
 export type EventTerminate = EventData<"Terminate", string>;
@@ -18,11 +22,10 @@ export function useScene() {
   return React.useContext(SceneContext) as SceneStore;
 }
 
-export interface Props {
-  children: React.ReactNode;
-}
+export interface Props extends MapProps {}
 
-export default function Scene({ children }: Props) {
+export default function Scene({ map }: Props) {
+  const { eventManager } = useGame();
   const [objects, setObjects] = React.useState<React.ReactElement[]>([]);
 
   const contextValue: SceneStore = {
@@ -42,13 +45,21 @@ export default function Scene({ children }: Props) {
 
   React.useEffect(() => {
     contextValue.add(<ambientLight />);
+    contextValue.add(<Map map={map} />);
     contextValue.add(<Stats />);
+
+    eventManager.emit<EventInitialize>("Initialize");
+
+    return () => {
+      (async () => {
+        await eventManager.emit<EventTerminate>("Terminate");
+      })();
+    };
   }, []);
 
   return (
     <SceneContext.Provider value={contextValue}>
       <group>{objects}</group>
-      {children}
     </SceneContext.Provider>
   );
 }

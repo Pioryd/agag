@@ -1,23 +1,14 @@
-import { Canvas } from "react-three-fiber";
-import { OrbitControls } from "@react-three/drei";
+import Game from "./Game";
 
-import GameWindow from "./components/GameWindow";
-import GameObject from "./components/GameObject";
-
-import AssetManager from "./managers/Asset";
-import SceneManager from "./managers/Scene";
+import useWindowSize from "./__mockData/useWindowSize";
+import data from "./__mockData/data";
+import tiles from "./__mockData/map";
+import objects from "./__mockData/objects";
 
 export default function App() {
+  const [width, height] = useWindowSize();
+
   return (
-    <GameWindow width={600} height={600}>
-      <Canvas>
-        <AssetManager data={{ sprite: {}, sound: {} }}>
-          <SceneManager>
-            <OrbitControls />
-            <GameObject />
-          </SceneManager>
-        </AssetManager>
-      </Canvas>
-    </GameWindow>
+    <Game width={width} height={height} data={data} map={{ tiles, objects }} />
   );
 }

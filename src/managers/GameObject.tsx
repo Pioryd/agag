@@ -7,6 +7,8 @@ import useEventManager, {
 import useApi, { ValueType as ApiValueType } from "../core/useApi";
 import { Position, Layer } from "../core/types";
 
+import { useGame } from "./Game";
+
 export type GameObjectApi = {
   id: string;
   layer: Layer;
@@ -50,6 +52,7 @@ export default function GameObject({
   const [position, setPosition] = React.useState<Position>(initialPosition);
   const [draw, setDraw] = React.useState(initialDraw);
 
+  const { addGameObjectApi, removeGameObjectApi } = useGame();
   const forceUpdate = React.useReducer(() => ({}), {})[1] as () => void;
 
   const gameObjectApi = React.useMemo<GameObjectApi>(
@@ -76,6 +79,11 @@ export default function GameObject({
       forceUpdate
     ]
   );
+
+  React.useLayoutEffect(() => {
+    addGameObjectApi(gameObjectApi);
+    return () => removeGameObjectApi(gameObjectApi);
+  }, [addGameObjectApi, removeGameObjectApi, gameObjectApi]);
 
   return (
     <GameObjectContext.Provider value={gameObjectApi}>

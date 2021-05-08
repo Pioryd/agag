@@ -2,6 +2,7 @@ import React from "react";
 import anime from "animejs";
 
 import { useGameObject } from "../managers/GameObject";
+import { useGame } from "../managers/Game";
 
 import { Api } from "../core/useApi";
 import { EventData } from "../core/useEventManager";
@@ -33,6 +34,7 @@ export type MoveableApi = Api<
 >;
 
 export default function Moveable() {
+  const { isPositionWalkable } = useGame();
   const {
     position,
     setPosition,
@@ -54,6 +56,11 @@ export default function Moveable() {
         if (!canMove.current) return false;
 
         eventManager.emit<EventMoveBegin>("MoveBegin", targetPosition);
+
+        if (!isPositionWalkable(targetPosition)) {
+          eventManager.emit<EventMoveEnd>("MoveEnd", targetPosition);
+          return false;
+        }
 
         canMove.current = false;
         eventManager.emit<EventMoveActive>("MoveActive", targetPosition);

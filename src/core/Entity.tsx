@@ -1,8 +1,14 @@
 import _ from "lodash";
 
+import GameObject, { GameObjectProps } from "../managers/GameObject";
 import { useAsset, SpriteAsset } from "../managers/Asset";
 
-import { Position } from "./types";
+import { Position } from "../core/types";
+
+import Collidable from "../behaviors/Collidable";
+import Interactable from "../behaviors/Interactable";
+import Moveable from "../behaviors/Moveable";
+import Scriptable from "../behaviors/Scriptable";
 
 import Sprite, { SpriteProps } from "./Sprite";
 
@@ -20,13 +26,14 @@ export interface Props {
   script?: any;
   selectedSoundAsset?: string;
   selectedSpriteAsset?: SelectedSpriteAsset;
+  gameObject: GameObjectProps;
 }
 
 export default function Entity(props: Props) {
   const assets = useAsset();
 
   return (
-    <div>
+    <GameObject {...props.gameObject}>
       {assets && props?.selectedSpriteAsset && (
         <Sprite
           asset={{
@@ -40,14 +47,22 @@ export default function Entity(props: Props) {
         />
       )}
 
-      {props.collidable && <div />}
-      {props.moveable && <div />}
-      {props.interactable && <div />}
+      {props.collidable && <Collidable />}
+      {props.moveable && <Moveable />}
+      {props.interactable && <Interactable />}
 
-      {props.script && <div />}
+      {props.script && (
+        <Scriptable
+          sound={
+            props.selectedSoundAsset &&
+            assets.data.sound[props.selectedSoundAsset]
+          }
+          {...props.script}
+        />
+      )}
 
-      {(props.character || props.player) && <div />}
-      {props.player && <div />}
-    </div>
+      {(props.character || props.player) && <group />}
+      {props.player && <group />}
+    </GameObject>
   );
 }

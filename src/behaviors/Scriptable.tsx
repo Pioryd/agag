@@ -1,6 +1,7 @@
 import React from "react";
 import _ from "lodash";
 
+import { useGame } from "../managers/Game";
 import { useGameObject } from "../managers/GameObject";
 import * as utils from "../utils";
 
@@ -40,6 +41,7 @@ const events: Array<
 function sourceToFunction(script: Script) {
   // !! After edit args, edit too in function [execute]
   eval(`script.fn = function({
+    gameContext,
     gameObjectContext,
     utils,
     store,
@@ -59,6 +61,7 @@ export interface Props {
 }
 
 export default function Scriptable(props: Props) {
+  const gameContext = useGame();
   const gameObjectContext = useGameObject();
   const sound = useSound(props.sound);
   const store = React.useRef(_.cloneDeep(props.store));
@@ -70,6 +73,7 @@ export default function Scriptable(props: Props) {
 
         // !! After edit args, edit too in function [sourceToFunction]
         script.fn({
+          gameContext,
           gameObjectContext,
           utils,
           store: store.current,
@@ -80,7 +84,7 @@ export default function Scriptable(props: Props) {
         console.error(`Unable to execute script [${script?.name}]`, err);
       }
     },
-    [gameObjectContext, utils, store, sound]
+    [gameContext, gameObjectContext, utils, store, sound]
   );
 
   React.useEffect(() => {
