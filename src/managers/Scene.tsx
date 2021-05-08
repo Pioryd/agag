@@ -3,6 +3,7 @@ import { createPortal } from "react-three-fiber";
 import { v4 as uuidv4 } from "uuid";
 
 import { EventData } from "../core/useEventManager";
+import Stats from "../components/Stats";
 
 export type EventInitialize = EventData<"Initialize", string>;
 export type EventTerminate = EventData<"Terminate", string>;
@@ -41,6 +42,7 @@ export default function Scene({ children }: Props) {
 
   React.useEffect(() => {
     contextValue.add(<ambientLight />);
+    contextValue.add(<Stats />);
   }, []);
 
   return (
