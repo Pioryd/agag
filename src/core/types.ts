@@ -8,3 +8,8 @@ export enum Layer {
   item = 2,
   character = 3
 }
+
+export enum Tiles {
+  walkable = 1,
+  collidable = 2
+}

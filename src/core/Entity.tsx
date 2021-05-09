@@ -5,10 +5,14 @@ import { useAsset, SpriteAsset } from "../managers/Asset";
 
 import { Position } from "../core/types";
 
+import CharacterScript from "../behaviors/Character";
+import Controller from "../behaviors/Controller";
+
 import Collidable from "../behaviors/Collidable";
 import Interactable from "../behaviors/Interactable";
 import Moveable from "../behaviors/Moveable";
 import Scriptable from "../behaviors/Scriptable";
+import Camera from "../behaviors/Camera";
 
 import Sprite, { SpriteProps } from "./Sprite";
 
@@ -21,7 +25,8 @@ export interface Props {
   collidable?: boolean;
   moveable?: boolean;
   interactable?: boolean;
-  player?: boolean;
+  camera?: boolean;
+  controller?: boolean;
   character?: boolean;
   script?: any;
   selectedSoundAsset?: string;
@@ -61,8 +66,9 @@ export default function Entity(props: Props) {
         />
       )}
 
-      {(props.character || props.player) && <group />}
-      {props.player && <group />}
+      {props.camera && <Camera />}
+      {(props.character || props.controller) && <CharacterScript />}
+      {props.controller && <Controller />}
     </GameObject>
   );
 }
