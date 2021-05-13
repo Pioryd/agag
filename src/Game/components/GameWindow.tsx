@@ -1,16 +1,15 @@
-
-export interface Props {
-  width: number;
-  height: number;
-}
-
 export default function GameWindow(props: any) {
   return (
     <div
+      id="game-window"
       style={{
+        position: "relative",
         display: "flex",
-        width: `${props.width - (props.width % 2)}px`,
-        height: `${props.height - (props.height % 2)}px`,
+        height: "100%",
+        width: "100%",
+        overflow: "none",
+        margin: 0,
+        padding: 0,
         justifyContent: "center",
         alignItems: "center"
       }}
