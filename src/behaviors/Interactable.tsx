@@ -19,6 +19,8 @@ export default function Interactable() {
   const gameObjectApi = useGameObject();
   const { eventManager: eventManagerOfGameObject, apiManager } = gameObjectApi;
 
+  const lastInteractTime = React.useRef(0);
+
   React.useLayoutEffect(() => {
     return apiManager.add<InteractableApi>("Interactable", {
       async interactWith(gameObjectApi) {
@@ -27,6 +29,10 @@ export default function Interactable() {
         );
 
         if (!interactableApi) return false;
+
+        const now = Date.now();
+        if (now - lastInteractTime.current <= 100) return false;
+        lastInteractTime.current = now;
 
         await interactableApi.onInteractFrom(gameObjectApi);
 

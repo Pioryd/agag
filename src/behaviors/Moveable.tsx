@@ -30,6 +30,7 @@ export type MoveableApi = Api<
   {
     canMove: () => boolean;
     move: (position: Position) => Promise<boolean>;
+    movingRef: React.MutableRefObject<boolean>;
   }
 >;
 
@@ -43,6 +44,7 @@ export default function Moveable() {
     apiManager
   } = useGameObject();
 
+  const movingRef = React.useRef(false);
   const canMove = React.useRef(true);
   const moveDirection = React.useRef<MoveDirection>([1, 1]);
   const lookDirection = React.useRef<LookDirection>(1);
@@ -71,7 +73,7 @@ export default function Moveable() {
             targets: Object3dRef.current.position,
             x: [position.x, targetPosition.x],
             y: [position.y, targetPosition.y],
-            duration: 125,
+            duration: 50,
             easing: "linear",
             begin() {
               const deltaX = (targetPosition.x - position.x) as Direction;
@@ -102,7 +104,8 @@ export default function Moveable() {
         eventManager.emit<EventMoveEnd>("MoveEnd", targetPosition);
 
         return true;
-      }
+      },
+      movingRef
     });
   }, [position]);
 

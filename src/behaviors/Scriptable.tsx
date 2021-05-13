@@ -40,7 +40,7 @@ const events: Array<
 
 function sourceToFunction(script: Script) {
   // !! After edit args, edit too in function [execute]
-  eval(`script.fn = function({
+  eval(`script.fn = async function({
     gameContext,
     gameObjectContext,
     utils,

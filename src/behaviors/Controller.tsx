@@ -57,9 +57,18 @@ export default function Controller() {
         direction.y !== 0 &&
         (!isPositionWalkable({ x: nextPosition.x, y: position.y }) ||
           !isPositionWalkable({ x: position.x, y: nextPosition.y })))
-    )
+    ) {
+      if (
+        !input.isPressed(keysIds.current.left) &&
+        !input.isPressed(keysIds.current.right) &&
+        !input.isPressed(keysIds.current.up) &&
+        !input.isPressed(keysIds.current.down)
+      )
+        apiManager.get<MoveableApi>("Moveable").movingRef.current = false;
       return;
+    }
 
+    apiManager.get<MoveableApi>("Moveable").movingRef.current = true;
     setPath([nextPosition]);
   });
 
@@ -68,6 +77,7 @@ export default function Controller() {
       try {
         const nextPath = findPath({ to: pointer });
         if (path.length > 0) nextPath.unshift(position);
+        apiManager.get<MoveableApi>("Moveable").movingRef.current = true;
         setPath(nextPath);
       } catch {
         setPath([]);
@@ -76,7 +86,15 @@ export default function Controller() {
   });
 
   React.useEffect(() => {
+    if (
+      !input.isPressed(keysIds.current.left) &&
+      !input.isPressed(keysIds.current.right) &&
+      !input.isPressed(keysIds.current.up) &&
+      !input.isPressed(keysIds.current.down)
+    )
+      apiManager.get<MoveableApi>("Moveable").movingRef.current = false;
     if (!path.length) return;
+    apiManager.get<MoveableApi>("Moveable").movingRef.current = true;
 
     (async () => {
       const [nextPosition] = path;
@@ -101,7 +119,9 @@ export default function Controller() {
         }
       }
 
-      if (done) setPath(path.slice(1));
+      if (done) {
+        setPath(path.slice(1));
+      }
     })();
   }, [path, apiManager, position, getGameObjectsApisByPosition, id]);
 

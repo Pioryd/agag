@@ -22,6 +22,8 @@ export interface SpriteAsset {
   frame: {
     width: number;
     height: number;
+    flip?: boolean;
+    time?: number;
   };
 }
 export interface AssetsData {

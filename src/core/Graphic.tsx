@@ -26,14 +26,22 @@ export default React.memo(
     }: Props,
     meshRef
   ) {
-    if (!asset || !asset.animation || !asset.animations?.[asset.animation])
+    if (
+      !asset ||
+      !asset.animation ||
+      !asset.animations?.[asset?.animation || ""]
+    )
       console.error(`Wrong asset data.\n'` + JSON.stringify(asset, null, 2));
 
-    const { draw } = useGameObject();
+    const { draw, apiManager } = useGameObject();
     const assets = useAsset();
     const textureRef = useUpdate<THREE.Texture>((texture) => {
       texture.needsUpdate = true;
     }, []);
+    const currentFrameData = React.useRef({
+      index: 0,
+      time: 0
+    });
 
     const image = asset?.url && (assets.assets[asset.url] as HTMLImageElement);
 
@@ -47,18 +55,47 @@ export default React.memo(
         return;
       }
 
-      const frames = asset.animations?.[asset.animation || 0] || [];
+      const frames: number[][] = asset.animations?.[asset?.animation || ""] || [
+        []
+      ];
 
-      const textureOffsetX = (frames[0][0] * asset.frame.width) / image.width;
-      const textureOffsetY = (frames[0][1] * asset.frame.height) / image.height;
+      if (frames.length === 0 || !frames[currentFrameData.current.index])
+        return;
+
+      const textureOffsetX =
+        (frames[currentFrameData.current.index][0] * asset.frame.width) /
+        image.width;
+      const textureOffsetY =
+        (frames[currentFrameData.current.index][1] * asset.frame.height) /
+        image.height;
 
       textureRef.current?.offset.set(textureOffsetX, textureOffsetY);
     }, [asset, image, textureRef]);
 
     React.useEffect(() => updateTextureOffset(), [updateTextureOffset]);
 
-    useFrame(() => {
+    useFrame(({ clock }) => {
       if (!draw) return;
+
+      if (!asset?.frame) {
+        console.error(`No found frame settings`);
+        return;
+      }
+
+      // if (apiManager.get<MoveableApi>("Moveable")?.canMove()) return;
+
+      const { oldTime } = clock;
+      if (
+        oldTime - currentFrameData.current.time >
+        (asset?.frame?.time || 100)
+      ) {
+        const frames = asset.animations?.[asset?.animation || ""] || [];
+
+        currentFrameData.current.index++;
+        if (currentFrameData.current.index >= frames.length)
+          currentFrameData.current.index = 0;
+        currentFrameData.current.time = oldTime;
+      }
 
       updateTextureOffset();
     });
@@ -93,7 +130,7 @@ export default React.memo(
       <mesh
         ref={meshRef}
         position={[offset.x, offset.y, 1]}
-        scale={[flipX, 1, 1]}
+        scale={[flipX * (asset?.frame?.flip ? -1 : 1), 1, 1]}
         geometry={geometry}
       >
         <meshLambertMaterial attach="material" transparent={true}>

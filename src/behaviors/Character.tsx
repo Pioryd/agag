@@ -5,7 +5,12 @@ import { ApiSprite } from "../core/Sprite";
 
 import { useGameObject } from "../managers/GameObject";
 
-import { EventMoveBegin, EventMoveActive } from "./Moveable";
+import {
+  MoveableApi,
+  EventMoveBegin,
+  EventMoveActive,
+  EventMoveEnd
+} from "./Moveable";
 
 export const characterOffsetY = 0.25;
 
@@ -25,8 +30,18 @@ export default function CharacterScript() {
       ({ x }: Position) => {
         const deltaX = Math.max(-1, Math.min(1, x - position.x));
         deltaX && apiManager.get<ApiSprite>("Sprite").setFlipX(deltaX);
+
+        if (apiManager.get<MoveableApi>("Moveable").movingRef.current)
+          apiManager.get<ApiSprite>("Sprite").setAnimation("move");
       }
     );
+  }, [position]);
+
+  React.useEffect(() => {
+    return eventManager.add<EventMoveEnd>("MoveEnd", ({ x }: Position) => {
+      if (!apiManager.get<MoveableApi>("Moveable").movingRef.current)
+        apiManager.get<ApiSprite>("Sprite").setAnimation("idle");
+    });
   }, [position]);
 
   return null;

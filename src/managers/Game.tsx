@@ -104,7 +104,7 @@ export default function Game({ children }: Props) {
       <Canvas
         camera={{
           position: [0, 0, 128],
-          zoom: 80,
+          zoom: 40,
           near: 0.1,
           far: 128
         }}

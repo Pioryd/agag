@@ -7,7 +7,11 @@ import { useGameObject } from "../managers/GameObject";
 
 import useInput from "../core/useInput";
 
-const ZOOMS = [32, 48, 64, 80, 96, 112, 128];
+const ZOOM = {
+  min: 1,
+  step: 0.5,
+  max: 5
+};
 
 export default function Camera() {
   const { eventManager } = useGame();
@@ -15,21 +19,21 @@ export default function Camera() {
   const input = useInput();
   const { camera } = useThree();
   const isReady = React.useRef(false);
-  const zoomLevel = React.useRef(3); // 80
+  const zoomStep = React.useRef(2);
 
   React.useEffect(() => {
     input.createEvent({
       keys: ["="],
       callback: (e) => {
         e.preventDefault();
-        zoomLevel.current = Math.min(ZOOMS.length - 1, zoomLevel.current + 1);
+        zoomStep.current = Math.min(ZOOM.max, zoomStep.current + ZOOM.step);
       }
     });
     input.createEvent({
       keys: ["-"],
       callback: (e) => {
         e.preventDefault();
-        zoomLevel.current = Math.max(0, zoomLevel.current - 1);
+        zoomStep.current = Math.max(ZOOM.min, zoomStep.current - ZOOM.step);
       }
     });
 
@@ -44,8 +48,8 @@ export default function Camera() {
     camera.position.setX(Object3dRef.current.position.x);
     camera.position.setY(Object3dRef.current.position.y);
 
-    if (ZOOMS[zoomLevel.current] !== camera.zoom) {
-      camera.zoom = ZOOMS[zoomLevel.current];
+    if (20 * zoomStep.current !== camera.zoom) {
+      camera.zoom = 20 * zoomStep.current;
       camera.updateProjectionMatrix();
     }
   });
