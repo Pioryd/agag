@@ -46,7 +46,7 @@ export default function Scene({ map }: Props) {
   React.useEffect(() => {
     contextValue.add(<ambientLight />);
     contextValue.add(<Map map={map} />);
-    contextValue.add(<Stats />);
+    contextValue.add(<Stats parentId="game-window" />);
 
     eventManager.emit<EventInitialize>("Initialize");
 

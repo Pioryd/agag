@@ -1,6 +1,7 @@
 export default function Camera(props: any) {
   return (
     <div
+      id="camera"
       style={{
         position: "relative",
         userSelect: "none",

@@ -6,19 +6,25 @@ import StatsImpl from "stats.js";
 interface Props {
   showPanel?: number;
   className?: string;
-  parent?: React.MutableRefObject<HTMLElement>;
+  parentId?: string;
 }
 
-export default function Stats({ showPanel = 0, className, parent }: Props) {
+export default function Stats({ showPanel = 0, className, parentId }: Props) {
   const [stats] = React.useState(() => new StatsImpl());
 
   React.useEffect(() => {
-    const node = (parent && parent.current) || document.body;
+    const node =
+      (parentId && document.getElementById(parentId)) || document.body;
 
     stats.showPanel(showPanel);
     node.appendChild(stats.dom);
 
     if (className) stats.dom.classList.add(className);
+
+    stats.dom.style.position = "absolute";
+    stats.dom.style.top = 0;
+    stats.dom.style.right = 0;
+    stats.dom.style.left = "auto";
 
     const begin = addEffect(() => stats.begin());
     const end = addAfterEffect(() => stats.end());
@@ -28,7 +34,7 @@ export default function Stats({ showPanel = 0, className, parent }: Props) {
       begin();
       end();
     };
-  }, [showPanel, className, parent, stats]);
+  }, [showPanel, className, parentId, stats]);
 
   return null;
 }
