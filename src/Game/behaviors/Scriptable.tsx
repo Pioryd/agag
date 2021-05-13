@@ -42,7 +42,7 @@ function sourceToFunction(script: Script) {
   // !! After edit args, edit too in function [execute]
   eval(`script.fn = async function({
     gameContext,
-    gameObjectContext,
+    gameObjectApi,
     utils,
     store,
     sound,
@@ -62,7 +62,7 @@ export interface Props {
 
 export default function Scriptable(props: Props) {
   const gameContext = useGame();
-  const gameObjectContext = useGameObject();
+  const gameObjectApi = useGameObject();
   const sound = useSound(props.sound);
   const store = React.useRef(_.cloneDeep(props.store));
 
@@ -74,7 +74,7 @@ export default function Scriptable(props: Props) {
         // !! After edit args, edit too in function [sourceToFunction]
         script.fn({
           gameContext,
-          gameObjectContext,
+          gameObjectApi,
           utils,
           store: store.current,
           sound,
@@ -84,11 +84,11 @@ export default function Scriptable(props: Props) {
         console.error(`Unable to execute script [${script?.name}]`, err);
       }
     },
-    [gameContext, gameObjectContext, utils, store, sound]
+    [gameContext, gameObjectApi, utils, store, sound]
   );
 
   React.useEffect(() => {
-    const { add } = gameObjectContext.eventManager;
+    const { add } = gameObjectApi.eventManager;
     const { fn } = props as any;
     const removeCallbacks: any = [];
 
