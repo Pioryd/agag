@@ -1,11 +1,13 @@
 import SportsEsportsIcon from "@material-ui/icons/SportsEsports";
 import ImageSearchIcon from "@material-ui/icons/ImageSearch";
 import LiveTvIcon from "@material-ui/icons/LiveTv";
+// import AccountTreeIcon from "@material-ui/icons/AccountTree";
 
 import Game from "../Game";
 
 import Page from "./components/Page";
 
+// import Objects from "./views/Objects";
 import Sprites from "./views/Sprites";
 import Assets from "./views/Assets";
 
@@ -21,6 +23,10 @@ export default function App() {
           icon: SportsEsportsIcon,
           component: <Game data={data} map={{ tiles, objects }} />
         },
+        // Objects: {
+        //   icon: AccountTreeIcon,
+        //   component: <Objects />
+        // }
         Sprites: {
           icon: LiveTvIcon,
           component: <Sprites />
