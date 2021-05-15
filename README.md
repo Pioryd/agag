@@ -4,13 +4,23 @@
 
 ## Build with
 
-- React, Three.js, TypeScript, Material UI
+- **Server**: Express, WebSocket, TypeScript
+- **Client**: React, TypeScript, Three.js, WebSocket, Material UI
 
 ## Install and run
 
+- Configure **.env** files for client and server, examples bellow.
+
+**Client**
 ```bash
 npm install
 npm start
+```
+
+**Server**
+```bash
+npm install
+npm run dev
 ```
 
 ## Missing __mockData
@@ -28,3 +38,14 @@ npm start
 - [ ] Real-Time IDE
 - [ ] Custom Scripting System
 - [ ] Multiplayer Online Game Server/Client
+
+## Server - example .env
+
+In server root directory create:
+
+- .env.development .env.production .env.test
+
+```environment
+PORT=8080
+WEB_SERVER=false
+```
