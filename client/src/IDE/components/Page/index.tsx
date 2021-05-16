@@ -1,5 +1,12 @@
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
+import React from "react";
+import { Tabs, TabList, TabPanel } from "react-tabs";
+import {
+  createStyles,
+  makeStyles,
+  Theme,
+  useTheme
+} from "@material-ui/core/styles";
+import { useMediaQuery } from "@material-ui/core";
 import { SvgIconComponent } from "@material-ui/icons";
 
 import { useNetworkApi } from "../../managers/NetworkApi";
@@ -7,6 +14,8 @@ import { useNetworkApi } from "../../managers/NetworkApi";
 import LoginPanel from "./LoginPanel";
 import ConnectingPanel from "./ConnectingPanel";
 import ConnectedStatusIcon from "./ConnectedStatusIcon";
+import DesktopTabs from "./DesktopTabs";
+import MobileTabs from "./MobileTabs";
 
 export interface Item {
   icon: SvgIconComponent;
@@ -62,23 +71,36 @@ const useStyles = makeStyles((theme: Theme) =>
 
 export default function Page({ items }: Props) {
   const classes = useStyles();
+  const theme = useTheme();
+  const mobile = useMediaQuery(theme.breakpoints.down("xs"));
 
   const { loggedIn, reconnecting } = useNetworkApi();
 
+  const [tabIndex, setTabIndex] = React.useState(0);
+
   return (
     <div className={classes.page}>
-      <Tabs forceRenderTabPanel={true}>
+      <Tabs
+        defaultIndex={0}
+        forceRenderTabPanel={true}
+        selectedIndex={tabIndex}
+      >
         <TabList>
           <ConnectedStatusIcon />
 
-          {Object.keys(items).map((key: string) => {
-            const { icon: Icon } = items[key];
-            return (
-              <Tab key={"key-TabList-" + key} className={classes.tabList}>
-                <Icon className={classes.tabIcon} />
-              </Tab>
-            );
-          })}
+          {mobile ? (
+            <MobileTabs
+              items={items}
+              tabIndex={tabIndex}
+              setTabIndex={setTabIndex}
+            />
+          ) : (
+            <DesktopTabs
+              items={items}
+              tabIndex={tabIndex}
+              setTabIndex={setTabIndex}
+            />
+          )}
         </TabList>
 
         {Object.keys(items).map((key: string) => (

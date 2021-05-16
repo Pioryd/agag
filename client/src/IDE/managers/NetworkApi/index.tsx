@@ -1,10 +1,9 @@
 import React from "react";
 
-import useUsers, { Users } from "./useUsers";
 import useWebSocket, { Packet } from "./useWebSocket";
 
 export interface AppContextType {
-  users: Users;
+  users: string[];
   mainUser: string;
   targetUser: string;
   loggedIn: boolean;
@@ -30,7 +29,7 @@ export interface Props {
 }
 
 function App({ children }: Props) {
-  const usersHook = useUsers();
+  const [users, setUsers] = React.useState<string[]>([]);
 
   const webSocket = useWebSocket();
 
@@ -44,7 +43,6 @@ function App({ children }: Props) {
   const [reconnecting, setReconnecting] = React.useState(false);
 
   const setTargetUser = (name: string) => {
-    usersHook.setUnreadMessages(name, false);
     _setTargetUser(name);
   };
 
@@ -57,7 +55,7 @@ function App({ children }: Props) {
       if (name != null) setLoggedIn(true);
     } else if (packetId === "usersList") {
       const { users } = packetData;
-      usersHook.update(users);
+      setUsers([...users]);
     }
   };
 
@@ -73,8 +71,7 @@ function App({ children }: Props) {
   };
 
   const clear = () => {
-    usersHook.clear();
-
+    setUsers([]);
     setMainUser("");
     setTargetUser("");
     setLoggedIn(false);
@@ -102,10 +99,8 @@ function App({ children }: Props) {
   }, [webSocket.messages]);
 
   React.useEffect(() => {
-    const usersNames = Object.keys(usersHook.users);
-
-    if (!usersNames.includes(targetUser)) setTargetUser("");
-  }, [usersHook.users]);
+    if (!users.includes(targetUser)) setTargetUser("");
+  }, [users]);
 
   React.useEffect(() => {
     ref.current = webSocket;
@@ -121,7 +116,7 @@ function App({ children }: Props) {
   }, []);
 
   const contextValue = {
-    users: usersHook.users,
+    users,
     mainUser,
     targetUser,
     loggedIn,

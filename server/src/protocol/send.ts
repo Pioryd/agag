@@ -25,8 +25,7 @@ export function usersList(webSocket: WebSocket, store: Store) {
   const usersList: string[] = [];
 
   for (const userData of usersData)
-    if (userData.name && userData.webSocket != webSocket)
-      usersList.push(userData.name);
+    if (userData.name) usersList.push(userData.name);
 
   send(webSocket, "usersList", { users: usersList });
 }
