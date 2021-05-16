@@ -39,6 +39,16 @@ npm run dev
 - [ ] Custom Scripting System
 - [ ] Multiplayer Online Game Server/Client
 
+## Client - example .env
+
+In client root directory create:
+
+- .env.development .env.production .env.test
+
+```environment
+REACT_APP_WS_URL=ws://localhost:8080
+```
+
 ## Server - example .env
 
 In server root directory create:

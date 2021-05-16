@@ -2,6 +2,12 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import { SvgIconComponent } from "@material-ui/icons";
 
+import { useNetworkApi } from "../../managers/NetworkApi";
+
+import LoginPanel from "./LoginPanel";
+import ConnectingPanel from "./ConnectingPanel";
+import ConnectedStatusIcon from "./ConnectedStatusIcon";
+
 export interface Item {
   icon: SvgIconComponent;
   component: JSX.Element;
@@ -57,10 +63,14 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Page({ items }: Props) {
   const classes = useStyles();
 
+  const { loggedIn, reconnecting } = useNetworkApi();
+
   return (
     <div className={classes.page}>
       <Tabs forceRenderTabPanel={true}>
         <TabList>
+          <ConnectedStatusIcon />
+
           {Object.keys(items).map((key: string) => {
             const { icon: Icon } = items[key];
             return (
@@ -73,7 +83,13 @@ export default function Page({ items }: Props) {
 
         {Object.keys(items).map((key: string) => (
           <TabPanel key={"key-TabPanel-" + key}>
-            <div className={classes.content}>{items[key].component}</div>
+            <div className={classes.content}>
+              {loggedIn ? (
+                items[key].component
+              ) : (
+                <>{reconnecting ? <ConnectingPanel /> : <LoginPanel />}</>
+              )}
+            </div>
           </TabPanel>
         ))}
       </Tabs>

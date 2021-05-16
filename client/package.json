@@ -5,6 +5,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "*",
     "@react-spring/three": "^9.0.0-rc.3",
     "@react-three/drei": "^3.9.0",
     "animejs": "^3.2.1",
