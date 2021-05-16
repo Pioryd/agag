@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     button: {
       marginTop: 10
+    },
+    circularProgressBox: {
+      marginTop: 10,
+      width: "100%"
     }
   })
 );
@@ -42,7 +46,10 @@ export default function ConnectingPanel() {
           {mainUser != null ? (
             <>
               <Alert severity="info">Connecting...</Alert>
-              <CircularProgress />
+              <Box className={classes.circularProgressBox}>
+                <CircularProgress />
+              </Box>
+
               <Button
                 className={classes.button}
                 variant="contained"
