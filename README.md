@@ -1,6 +1,6 @@
 # Auto Generator Auto Games
 
-## Live preview: [DEMO](https://agag-313620.ew.r.appspot.com/)
+## Live preview: [DEMO](http://ec2-13-58-22-232.us-east-2.compute.amazonaws.com/agag)
 
 ## Build with
 
