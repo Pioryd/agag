@@ -1,6 +1,6 @@
 # Auto Generator Auto Games
 
-## Live preview: [DEMO](http://ec2-13-58-22-232.us-east-2.compute.amazonaws.com/agag)
+## Live preview: [DEMO](http://ec2-3-142-143-221.us-east-2.compute.amazonaws.com/agag)
 
 ## Build with
 
@@ -25,7 +25,7 @@ npm run dev
 
 ## Missing __mockData
 
-1. Download from [upload.7z](https://agag-313620.ew.r.appspot.com/assets/upload.7z)
+1. Download from [upload.7z](http://ec2-3-142-143-221.us-east-2.compute.amazonaws.com/agag/assets/upload.7z)
 2. Copy "assets" folder to public
 3. Copy "__mockData" folder to src
   
