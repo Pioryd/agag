@@ -46,6 +46,7 @@ In client root directory create:
 - .env.development .env.production .env.test
 
 ```environment
+# For ssl connection use wss://
 REACT_APP_WS_URL=ws://localhost:8080
 ```
 

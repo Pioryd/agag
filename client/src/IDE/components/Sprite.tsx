@@ -63,7 +63,6 @@ export default function Sprite({
 
   const animateDataRef = React.useRef({
     currentFrame,
-    setCurrentFrame,
     time: 0,
     request: 0
   });
@@ -85,9 +84,7 @@ export default function Sprite({
         animateDataRef.current.currentFrame++;
         if (animateDataRef.current.currentFrame >= frames.length)
           animateDataRef.current.currentFrame = 0;
-        animateDataRef.current.setCurrentFrame(
-          animateDataRef.current.currentFrame
-        );
+        setCurrentFrame(animateDataRef.current.currentFrame);
       }
 
       animateDataRef.current.request = requestAnimationFrame(animate);
