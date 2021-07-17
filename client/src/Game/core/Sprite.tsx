@@ -2,7 +2,7 @@ import React from "react";
 import * as THREE from "three";
 
 import { useGameObject } from "../managers/GameObject";
-import { Api } from "../core/useApi";
+import { Api } from "./useApi";
 
 import Graphic, { Props as GraphicProps } from "./Graphic";
 import { Position } from "./types";

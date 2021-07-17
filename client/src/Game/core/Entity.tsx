@@ -3,7 +3,7 @@ import _ from "lodash";
 import GameObject, { GameObjectProps } from "../managers/GameObject";
 import { useAsset, SpriteAsset } from "../managers/Asset";
 
-import { Position } from "../core/types";
+import { Position } from "./types";
 
 import CharacterScript from "../behaviors/Character";
 import Controller from "../behaviors/Controller";

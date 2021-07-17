@@ -2,7 +2,8 @@ import {
   SportsEsports as SportsEsportsIcon,
   ImageSearch as ImageSearchIcon,
   LiveTv as LiveTvIcon,
-  People as PeopleIcon
+  People as PeopleIcon,
+  Code as CodeIcon
 } from "@material-ui/icons";
 
 import data from "../__mockData/data";
@@ -18,28 +19,33 @@ import Page from "./components/Page";
 import Sprites from "./views/Sprites";
 import Assets from "./views/Assets";
 import UsersOnline from "./views/UsersOnline";
+import Editor from "./views/Editor";
 
 export default function IDE() {
   return (
     <NetworkManager>
       <Page
         items={{
-          Game: {
-            icon: SportsEsportsIcon,
-            component: <Game data={data} map={{ tiles, objects }} />
-          },
-          Sprites: {
-            icon: LiveTvIcon,
-            component: <Sprites />
-          },
-          Assets: {
-            icon: ImageSearchIcon,
-            component: <Assets />
-          },
-          UsersOnline: {
-            icon: PeopleIcon,
-            component: <UsersOnline />
+          Editor: {
+            icon: CodeIcon,
+            component: <Editor value="" onSave={() => {}} />
           }
+          // Game: {
+          //   icon: SportsEsportsIcon,
+          //   component: <Game data={data} map={{ tiles, objects }} />
+          // },
+          // Sprites: {
+          //   icon: LiveTvIcon,
+          //   component: <Sprites />
+          // },
+          // Assets: {
+          //   icon: ImageSearchIcon,
+          //   component: <Assets />
+          // },
+          // UsersOnline: {
+          //   icon: PeopleIcon,
+          //   component: <UsersOnline />
+          // }
         }}
       />
     </NetworkManager>

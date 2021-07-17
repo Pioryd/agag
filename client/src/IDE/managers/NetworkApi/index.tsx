@@ -36,15 +36,11 @@ function App({ children }: Props) {
   const ref = React.useRef<typeof webSocket | null>();
 
   const [mainUser, setMainUser] = React.useState("");
-  const [targetUser, _setTargetUser] = React.useState("");
+  const [targetUser, setTargetUser] = React.useState("");
   const [loggedIn, setLoggedIn] = React.useState(false);
   const [packetOnReconnect, setPacketOnReconnect] =
     React.useState<Packet | null>();
   const [reconnecting, setReconnecting] = React.useState(false);
-
-  const setTargetUser = (name: string) => {
-    _setTargetUser(name);
-  };
 
   const parse = (packet: Packet) => {
     const { packetId, packetData } = packet;

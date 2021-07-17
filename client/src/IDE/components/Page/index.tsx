@@ -106,11 +106,12 @@ export default function Page({ items }: Props) {
         {Object.keys(items).map((key: string) => (
           <TabPanel key={"key-TabPanel-" + key}>
             <div className={classes.content}>
-              {loggedIn ? (
+              {items[key].component}
+              {/* {loggedIn ? (
                 items[key].component
               ) : (
                 <>{reconnecting ? <ConnectingPanel /> : <LoginPanel />}</>
-              )}
+              )} */}
             </div>
           </TabPanel>
         ))}
